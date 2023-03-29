@@ -1,0 +1,7 @@
+.card__todo {
+  margin: 0.5rem;
+}
+.card__todoBody {
+  max-height: 15rem;
+  overflow-y: hidden;
+}
