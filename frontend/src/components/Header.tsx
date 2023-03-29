@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Button, ButtonGroup, Container, Navbar } from "react-bootstrap";
 import { AiOutlineLogout } from "react-icons/ai";
+import { FcTodoList } from "react-icons/fc";
 import { AuthContext } from "../contexts/AuthContext";
 import { UIContext } from "../contexts/UIContext";
 
@@ -10,7 +11,9 @@ const Header = () => {
   return (
     <Navbar bg="primary" variant="dark">
       <Container>
-        <Navbar.Brand>Todos</Navbar.Brand>
+        <Navbar.Brand>
+          <FcTodoList /> Todos
+        </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           {state.user ? (

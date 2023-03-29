@@ -1,17 +1,27 @@
 import { Card, Container } from "react-bootstrap";
 import LoginModal from "../components/landingpage/LoginModal";
 import SignUpModal from "../components/landingpage/SignUpModal";
-
+import { FcTodoList } from "react-icons/fc";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+import { Link } from "react-router-dom";
 const LandingPage = () => {
+  const { state } = useContext(AuthContext);
   return (
     <Container fluid>
-      <Container className="d-flex align-items-center justify-content-center">
-        <Card className="mt-3">
-          <Card.Body>
-            <Card.Text>Your todos are Safe</Card.Text>
-            <Card.Subtitle>Login Or Sign up for new user</Card.Subtitle>
-          </Card.Body>
-        </Card>
+      <Container className="mt-2 d-flex align-items-center justify-content-center flex-column">
+        <h1 style={{ fontSize: "4rem" }} className="font-weight-bold">
+          <FcTodoList />
+          Todos...
+        </h1>
+        <h4>Your Todos are safe and encrypted</h4>
+        {state.user ? (
+          <Link to={"/todos"}>
+            <h4>My Todos</h4>
+          </Link>
+        ) : (
+          <h4>Please login to create Todos</h4>
+        )}
       </Container>
       <LoginModal />
       <SignUpModal />

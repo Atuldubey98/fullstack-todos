@@ -11,6 +11,7 @@ function Options({ toggleShowAdd }: { toggleShowAdd: () => void }) {
         <span className="material-symbols-outlined">add</span>
         <span>Add Item</span>
       </Button>
+      
     </Container>
   );
 }
