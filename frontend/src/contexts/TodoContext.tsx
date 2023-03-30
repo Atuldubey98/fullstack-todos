@@ -20,8 +20,7 @@ const defaultTodosState: IDefaultTodoState = {
 };
 export const TodoContext = createContext({
   state: defaultTodosState,
-  getTodos: function () {},
-
+  getTodos: function (filter: any) {},
   updateTodoContext: function (todo: ITodo) {},
   addTodoContext: function (todo: ITodo) {},
   deleteTodoContext: function (_id: string) {},
@@ -30,10 +29,10 @@ export default function TodoContextProvider({ children }: any) {
   const instance = useAxios();
   const [state, dispatch] = useReducer(todoReducer, defaultTodosState);
 
-  async function getTodos() {
+  async function getTodos(filter: any) {
     try {
       dispatch({ type: TODOS_LOADING });
-      const { data } = await instance.get("/api/v1/todos");
+      const { data } = await instance.get("/api/v1/todos", { params: filter });
       dispatch({ type: TODOS_SUCCESS, payload: data.data });
     } catch (error) {
       dispatch({

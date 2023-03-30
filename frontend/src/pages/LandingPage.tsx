@@ -12,7 +12,7 @@ const LandingPage = () => {
       <Container className="mt-2 d-flex align-items-center justify-content-center flex-column">
         <h1 style={{ fontSize: "4rem" }} className="font-weight-bold">
           <FcTodoList />
-          Todos...
+          <span>Todos...</span>
         </h1>
         <h4>Your Todos are safe and encrypted</h4>
         {state.user ? (

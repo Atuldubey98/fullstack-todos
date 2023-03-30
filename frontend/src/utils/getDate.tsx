@@ -26,4 +26,5 @@ const getDate = (todo: ITodo) => {
   return `${isCreated} ${date}/${month}/${year} - ${time}`;
 };
 
+
 export default getDate;

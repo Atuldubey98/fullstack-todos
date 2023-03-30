@@ -19,16 +19,22 @@ class TodoController {
       next(error);
     }
   }
+  //Backend working
   public static async getTodos(
     req: Request,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const now = new Date();
-      const $gte = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      let queryString = JSON.stringify(req.query);
+      queryString = queryString.replace(
+        /\b(gte|gt|lte|lt)\b/g,
+        (match) => `$${match}`
+      );
+      const filter = JSON.parse(queryString);
+      
       const todos = await Todo.find({
-        createdAt: { $gte },
+        ...filter,
         userId: req.session.user!._id,
       });
       return res.status(200).send({ data: todos, total: todos.length });
@@ -36,6 +42,7 @@ class TodoController {
       next(error);
     }
   }
+
   public static async updateTodoById(
     req: Request,
     res: Response,
