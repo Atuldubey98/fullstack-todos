@@ -7,7 +7,7 @@ import { FcTodoList } from "react-icons/fc";
 
 import { TodoContext } from "../contexts/TodoContext";
 import ITodo from "../interfaces/ITodo";
-import useDate from "../utils/useDate";
+import useDate from "../hooks/useDate";
 
 const TodosPage = () => {
   const { state, getTodos } = useContext(TodoContext);

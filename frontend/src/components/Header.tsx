@@ -2,16 +2,18 @@ import { useContext } from "react";
 import { Button, ButtonGroup, Container, Navbar } from "react-bootstrap";
 import { AiOutlineLogout } from "react-icons/ai";
 import { FcTodoList } from "react-icons/fc";
+import { useNavigate } from "react-router";
 import { AuthContext } from "../contexts/AuthContext";
 import { UIContext } from "../contexts/UIContext";
 
 const Header = () => {
   const { toggleLoginModal, toggleSignUpModal } = useContext(UIContext);
   const { state, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   return (
     <Navbar bg="primary" variant="dark">
       <Container>
-        <Navbar.Brand>
+        <Navbar.Brand style={{cursor : 'pointer'}} onClick={() => navigate("/")}>
           <FcTodoList /> Todos
         </Navbar.Brand>
         <Navbar.Toggle />

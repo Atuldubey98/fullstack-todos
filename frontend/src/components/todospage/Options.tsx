@@ -1,7 +1,8 @@
 import { memo, useState } from "react";
 import { Button, Container, Form, Row, Col, Stack } from "react-bootstrap";
 import { AiFillPlusSquare } from "react-icons/ai";
-import useDate from "../../utils/useDate";
+import useDate from "../../hooks/useDate";
+import TodoSearchForm from "../TodoSearchForm";
 
 function Options({
   toggleShowAdd,
@@ -33,7 +34,7 @@ function Options({
       >
         <AiFillPlusSquare /> Add
       </Button>
-      <Row xs={1}>
+      <Row xs={1} md={2} xl={2}>
         <Col>
           <Form.Group>
             <Form.Label>Date : </Form.Label>
@@ -46,7 +47,9 @@ function Options({
             />
           </Form.Group>
         </Col>
-        
+        <Col>
+          <TodoSearchForm />
+        </Col>
       </Row>
     </Container>
   );

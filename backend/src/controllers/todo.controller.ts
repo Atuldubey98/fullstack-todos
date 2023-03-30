@@ -1,8 +1,46 @@
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
+import ITodo from "../interfaces/ITodo";
 import Todo from "../models/Todo";
 
 class TodoController {
+  public static async searchTodos(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const searchedTodos: any = await Todo.aggregate([
+        {
+          $match: {
+            $or: [
+              { content: { $regex: req.query.word } },
+              { title: { $regex: req.query.word } },
+            ],
+          },
+        },
+      ]).sort({ createdAt: -1 });
+      const map = new Map<string, ITodo[]>();
+      searchedTodos.forEach((todo: ITodo) => {
+        const createdAt = new Date(todo?.createdAt)
+          .toISOString()
+          .substring(0, 10);
+        if (!map.has(createdAt)) {
+          const todos: ITodo[] = [todo];
+          map.set(createdAt, todos);
+        } else {
+          map.get(createdAt)?.push(todo);
+        }
+      });
+      const response: any = [];
+      for (const [createdAt, todos] of map.entries()) {
+        response.push({ createdAt, todos });
+      }
+      return res.status(200).send(response);
+    } catch (error) {
+      next(error);
+    }
+  }
   /**
    * createTodo
    */
@@ -32,7 +70,7 @@ class TodoController {
         (match) => `$${match}`
       );
       const filter = JSON.parse(queryString);
-      
+
       const todos = await Todo.find({
         ...filter,
         userId: req.session.user!._id,
