@@ -6,7 +6,7 @@ import config from "./config";
 import MongoStore from "connect-mongo";
 import todoRouter from "./routes/todo.routes";
 import mongoose from "mongoose";
-import cors from 'cors';
+import cors from "cors";
 const app: Application = express();
 
 app.use(express.json());
@@ -14,13 +14,16 @@ app.use(express.json());
 const corsOptions = {
   credentials: true, // This is important.
   origin: (origin: any, callback: any) => {
-    if(!origin || ['http://localhost:5173',"http://127.0.0.1:9000"].includes(origin)){
-    	return callback(null, true)
+    if (
+      !origin ||
+      ["http://localhost:5173", "http://127.0.0.1:9000"].includes(origin)
+    ) {
+      return callback(null, true);
     }
 
-      callback(new Error('Not allowed by CORS'));
-  }
-}
+    callback(new Error("Not allowed by CORS"));
+  },
+};
 app.use(cors(corsOptions));
 app.use(
   session({
@@ -48,7 +51,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
   let errorMessage = "An unknown error occured.";
   let statusCode = 500;
-  console.log(error);
   if (error instanceof mongoose.Error) {
     errorMessage = error.message;
     statusCode = 400;

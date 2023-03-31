@@ -3,7 +3,6 @@ import Header from "./components/Header";
 import LandingPage from "./pages/LandingPage";
 import TodoSearchPage from "./pages/TodoSearchPage";
 import TodosPage from "./pages/TodosPage";
-
 const App = () => {
   return (
     <div className="app">

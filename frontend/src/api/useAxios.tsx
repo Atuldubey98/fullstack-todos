@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 const useAxios = () => {
   const navigate = useNavigate();
+  const baseURL = import.meta.env.DEV ? "http://localhost:9000/" : "";
   const instance = axios.create({
-    baseURL: "http://localhost:9000/",
+    baseURL,
     withCredentials: true,
   });
   instance.interceptors.response.use(
