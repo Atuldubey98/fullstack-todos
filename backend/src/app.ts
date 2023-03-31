@@ -9,15 +9,14 @@ import mongoose from "mongoose";
 import cors from "cors";
 const app: Application = express();
 
+const origins: string[] = config.NODE_ENV
+  ? ["http://localhost:5173", "http://127.0.0.1:9000"]
+  : ["https://frontend-todos.onrender.com"];
 app.use(express.json());
-
 const corsOptions = {
   credentials: true, // This is important.
   origin: (origin: any, callback: any) => {
-    if (
-      !origin ||
-      ["http://localhost:5173", "http://127.0.0.1:9000"].includes(origin)
-    ) {
+    if (!origin || origins.includes(origin)) {
       return callback(null, true);
     }
 
