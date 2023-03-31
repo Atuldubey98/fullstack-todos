@@ -2,8 +2,39 @@ import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import ITodo from "../interfaces/ITodo";
 import Todo from "../models/Todo";
-
+function getPreviousOrNextDate(checkDate: Date, payload: number): Date {
+  const date = new Date();
+  date.setDate(checkDate.getDate() + payload);
+  return date;
+}
 class TodoController {
+  public static async dashboardTodos(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const notComplete = await Todo.count({
+        userId: req.session.user!._id,
+        complete: false,
+        createdAt: {
+          $lte: new Date(Date.now()),
+          $gte: getPreviousOrNextDate(new Date(Date.now()), -7),
+        },
+      });
+      const complete = await Todo.count({
+        userId: req.session.user!._id,
+        complete: true,
+        createdAt: {
+          $lte: new Date(Date.now()),
+          $gte: getPreviousOrNextDate(new Date(Date.now()), -7),
+        },
+      });
+      return res.status(200).send({ complete, notComplete });
+    } catch (error) {
+      next(error);
+    }
+  }
   public static async searchTodos(
     req: Request,
     res: Response,

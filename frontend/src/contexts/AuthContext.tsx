@@ -47,7 +47,6 @@ export default function AuthContextProvider(props: AuthProps) {
       const { data } = await instance.post(LOGIN_URL, user);
       dispatch({ type: LOGIN_SUCCESS, payload: data });
       toggleLoginModal();
-      navigate("/todos", { replace: true });
     } catch (e) {
       const errorMessage = apiError(e);
       dispatch({
@@ -63,7 +62,6 @@ export default function AuthContextProvider(props: AuthProps) {
         if (response.status === 200) {
           resetTodos();
           dispatch({ type: RESET_USER });
-          console.log(todoState.todos);
           navigate("/", { replace: true });
         }
       }
