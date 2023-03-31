@@ -10,16 +10,11 @@ class TodoController {
     next: NextFunction
   ) {
     try {
-      const searchedTodos: any = await Todo.aggregate([
-        {
-          $match: {
-            $or: [
-              { content: { $regex: req.query.word } },
-              { title: { $regex: req.query.word } },
-            ],
-          },
-        },
-      ]).sort({ createdAt: -1 });
+      const word = typeof req.query.word === "string" ? req.query.word : "";
+      const searchedTodos: ITodo[] = await Todo.find({
+        $text: { $search: word },
+        userId: req.session.user!._id,
+      });
       const map = new Map<string, ITodo[]>();
       searchedTodos.forEach((todo: ITodo) => {
         const createdAt = new Date(todo?.createdAt)

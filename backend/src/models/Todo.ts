@@ -10,14 +10,16 @@ const todoSchema = new Schema(
     title: {
       type: String,
       required: true,
+      index: "text",
       minLength: [3, "Minimum Length of title should be three"],
     },
     content: {
       type: String,
+      index: "text",
     },
   },
   { timestamps: true, versionKey: false }
 );
-
 type Todo = InferSchemaType<typeof todoSchema>;
-export default model<Todo>("todo", todoSchema);
+const todoModel = model<Todo>("todo", todoSchema);
+export default todoModel;

@@ -11,6 +11,7 @@ import todoReducer, {
   TODO_ADD,
   TODO_DELETE,
   TODO_UPDATE,
+  RESET_TODOS,
 } from "../reducers/todoReducer";
 
 const defaultTodosState: IDefaultTodoState = {
@@ -21,6 +22,7 @@ const defaultTodosState: IDefaultTodoState = {
 export const TodoContext = createContext({
   state: defaultTodosState,
   getTodos: function (filter: any) {},
+  resetTodos: function () {},
   updateTodoContext: function (todo: ITodo) {},
   addTodoContext: function (todo: ITodo) {},
   deleteTodoContext: function (_id: string) {},
@@ -41,6 +43,9 @@ export default function TodoContextProvider({ children }: any) {
       });
     }
   }
+  function resetTodos() {
+    dispatch({ type: RESET_TODOS });
+  }
   function addTodoContext(todo: ITodo) {
     dispatch({ type: TODO_ADD, payload: todo });
   }
@@ -55,6 +60,7 @@ export default function TodoContextProvider({ children }: any) {
       value={{
         state,
         getTodos,
+        resetTodos,
         updateTodoContext,
         addTodoContext,
         deleteTodoContext,

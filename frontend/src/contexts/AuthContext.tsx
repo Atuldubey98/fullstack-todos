@@ -18,6 +18,9 @@ import authReducer, {
   REGISTER_SUCCESS,
   RESET_USER,
 } from "../reducers/authReducer";
+import { UIContext } from "./UIContext";
+import { TODOS_SUCCESS } from "../reducers/todoReducer";
+import { TodoContext } from "./TodoContext";
 
 export const AuthContext = React.createContext({
   state: defaultAuthState,
@@ -31,6 +34,8 @@ interface AuthProps {
 }
 export default function AuthContextProvider(props: AuthProps) {
   const [state, dispatch] = useReducer(authReducer, defaultAuthState);
+  const { toggleLoginModal } = useContext(UIContext);
+  const { resetTodos, state: todoState } = useContext(TodoContext);
   const navigate = useNavigate();
   const instance = useAxios();
   function resetUser() {
@@ -41,6 +46,7 @@ export default function AuthContextProvider(props: AuthProps) {
     try {
       const { data } = await instance.post(LOGIN_URL, user);
       dispatch({ type: LOGIN_SUCCESS, payload: data });
+      toggleLoginModal();
       navigate("/todos", { replace: true });
     } catch (e) {
       const errorMessage = apiError(e);
@@ -55,7 +61,9 @@ export default function AuthContextProvider(props: AuthProps) {
       if (confirm("Do you want to logout")) {
         const response = await instance.post("/api/v1/users/logout");
         if (response.status === 200) {
+          resetTodos();
           dispatch({ type: RESET_USER });
+          console.log(todoState.todos);
           navigate("/", { replace: true });
         }
       }

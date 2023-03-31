@@ -7,9 +7,17 @@ export const TODO_UPDATE = "TODO_UPDATE";
 export const TODO_DELETE = "TODO_DELETE";
 export const SET_TODO = "SET_TODO";
 export const UNSET_TODO = "UNSET_TODO";
+export const RESET_TODOS = "RESET_TODOS";
 const todoReducer = (state: IDefaultTodoState, action: any) => {
   const { type, payload } = action;
   switch (type) {
+    case RESET_TODOS:
+      return {
+        ...state,
+        todos: [],
+        error: "",
+        loading: false,
+      };
     case TODO_ADD:
       return {
         ...state,

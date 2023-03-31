@@ -49,7 +49,7 @@ const TodosPage = () => {
       />
       <Container className="mt-2 d-flex justify-content-center align-items-center">
         {error ? <Alert variant={"danger"}>{error}</Alert> : null}
-        {loading ? <Spinner animation="grow" /> : null}
+
         {todos.length <= 0 ? (
           <h1 style={{ fontSize: "3rem" }} className="font-weight-bold">
             <FcTodoList />
@@ -57,13 +57,19 @@ const TodosPage = () => {
           </h1>
         ) : null}
       </Container>
-      <Row xs={1} md={2} xl={3}>
-        {todos.map((todo) => (
-          <Col key={todo._id}>
-            <Todo todo={todo} onSetTodo={onSetTodo} />
-          </Col>
-        ))}
-      </Row>
+      {loading ? (
+        <Container className="mt-2 d-flex justify-content-center align-items-center">
+          <Spinner animation="grow" />
+        </Container>
+      ) : (
+        <Row xs={1} md={2} xl={3}>
+          {todos.map((todo) => (
+            <Col key={todo._id}>
+              <Todo todo={todo} onSetTodo={onSetTodo} />
+            </Col>
+          ))}
+        </Row>
+      )}
 
       {showUpdate ? (
         <AddUpdateTodoModal
