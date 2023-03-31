@@ -26,21 +26,24 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 const sessionOptions: SessionOptions = {
+  name: config.SESSION_NAME,
   secret: config.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
     maxAge: 60 * 60 * 1000,
-    secure: config.NODE_ENV === "production" ? true : false,
-    sameSite: config.NODE_ENV === "production" ? "none" : false,
+    domain:
+      config.NODE_ENV === "development"
+        ? "localhost"
+        : process.env.COOKIE_DOMAIN,
   },
-  rolling: true,
   store: new MongoStore({
     mongoUrl: config.MONGO_URI,
   }),
 };
 if (config.NODE_ENV === "production") {
   app.set("trust proxy", 1);
+  sessionOptions!.cookie!.secure = true;
 }
 app.use(session(sessionOptions));
 
