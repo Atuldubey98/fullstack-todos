@@ -7,6 +7,10 @@ const todoSchema = new Schema(
       required: true,
       ref: "user",
     },
+    complete: {
+      type: Schema.Types.Boolean,
+      default: false,
+    },
     title: {
       type: String,
       required: true,

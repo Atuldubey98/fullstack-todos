@@ -3,6 +3,7 @@ export default interface ITodo {
   title: string;
   content: string;
   userId: string;
+  complete: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
