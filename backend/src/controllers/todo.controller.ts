@@ -86,13 +86,13 @@ class TodoController {
       if (!_id) {
         throw createHttpError(400, "TODO_PAYLOAD_ERROR");
       }
-      const todo = await Todo.findByIdAndUpdate(
-        _id,
+      const todo = await Todo.findOneAndUpdate(
+        { _id, userId: req.session.user!._id },
         { ...req.body },
-        { new: true }
+        { new: true, runValidators: true }
       );
       if (!todo) {
-        throw createHttpError(400, "TODO_NOT_FOUND");
+        return res.status(404).send("TODO_NOT_FOUND");
       }
       return res.status(200).send(todo);
     } catch (error) {
@@ -109,7 +109,10 @@ class TodoController {
       if (!_id) {
         throw createHttpError(400, "TODO_PAYLOAD_ERROR");
       }
-      const todo = await Todo.findByIdAndDelete(_id);
+      const todo = await Todo.findOneAndDelete({
+        _id,
+        userId: req.session.user!._id,
+      });
       if (!todo) {
         throw createHttpError(400, "TODO_NOT_FOUND");
       }
