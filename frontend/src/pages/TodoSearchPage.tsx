@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 import useAxios from "../api/useAxios";
 import TodoSearchForm from "../components/TodoSearchForm";
 import TodoResult from "../components/todossearchpage/TodoResult";
@@ -36,9 +36,15 @@ function TodoSearchPage() {
         <TodoSearchForm />
       </Container>
       <Container>
-        {results.map((result: ISearchTodo, index: number) => (
-          <TodoResult result={result} key={index} />
-        ))}
+        {loading ? (
+          <Container className="d-flex align-items-center justify-content-center">
+            <Spinner animation="grow" />
+          </Container>
+        ) : (
+          results.map((result: ISearchTodo, index: number) => (
+            <TodoResult result={result} key={index} />
+          ))
+        )}
         {results.length === 0 ? (
           <h1 className="text-center">
             <FcTodoList />
