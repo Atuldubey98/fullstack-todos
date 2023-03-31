@@ -25,20 +25,24 @@ const corsOptions = {
   },
 };
 app.use(cors(corsOptions));
-app.use(
-  session({
-    secret: config.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 60 * 60 * 1000,
-    },
-    rolling: true,
-    store: new MongoStore({
-      mongoUrl: config.MONGO_URI,
-    }),
-  })
-);
+const sessionOptions = {
+  secret: config.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 60 * 60 * 1000,
+    secure: false,
+  },
+  rolling: true,
+  store: new MongoStore({
+    mongoUrl: config.MONGO_URI,
+  }),
+};
+if (config.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+  sessionOptions.cookie.secure = true;
+}
+app.use(session(sessionOptions));
 
 app.get("/health", (req: Request, res: Response) => {
   return res.status(200).send("Server is running");
