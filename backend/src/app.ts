@@ -1,7 +1,7 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import userRouter from "./routes/user.routes";
 import createHttpError, { isHttpError } from "http-errors";
-import session from "express-session";
+import session, { SessionOptions } from "express-session";
 import config from "./config";
 import MongoStore from "connect-mongo";
 import todoRouter from "./routes/todo.routes";
@@ -25,13 +25,14 @@ const corsOptions = {
   },
 };
 app.use(cors(corsOptions));
-const sessionOptions = {
+const sessionOptions: SessionOptions = {
   secret: config.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
     maxAge: 60 * 60 * 1000,
-    secure: false,
+    secure: config.NODE_ENV === "production" ? true : false,
+    sameSite: config.NODE_ENV === "production" ? "none" : false,
   },
   rolling: true,
   store: new MongoStore({
@@ -40,7 +41,6 @@ const sessionOptions = {
 };
 if (config.NODE_ENV === "production") {
   app.set("trust proxy", 1);
-  sessionOptions.cookie.secure = true;
 }
 app.use(session(sessionOptions));
 
