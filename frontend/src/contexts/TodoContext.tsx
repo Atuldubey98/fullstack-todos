@@ -41,6 +41,12 @@ export default function TodoContextProvider({ children }: any) {
         type: TODOS_ERROR,
         payload: apiError(error),
       });
+      setTimeout(() => {
+        dispatch({
+          type: TODOS_ERROR,
+          payload: "",
+        });
+      }, 1500);
     }
   }
   function resetTodos() {
