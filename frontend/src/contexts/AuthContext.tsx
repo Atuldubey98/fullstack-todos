@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiError from "../api/apiErrors";
 import { CURRENT_USER_URL, LOGIN_URL, REGISTER_URL } from "../api/apiUrls";
@@ -28,6 +28,7 @@ export const AuthContext = React.createContext({
   logout: function () {},
   login: function (user: ILoginUser) {},
   signup: function (user: ISignUpUser) {},
+  registerMsg: "",
 });
 interface AuthProps {
   children: JSX.Element;
@@ -35,7 +36,8 @@ interface AuthProps {
 export default function AuthContextProvider(props: AuthProps) {
   const [state, dispatch] = useReducer(authReducer, defaultAuthState);
   const { toggleLoginModal } = useContext(UIContext);
-  const { resetTodos, state: todoState } = useContext(TodoContext);
+  const { resetTodos } = useContext(TodoContext);
+  const [registerMsg, setRegisterMsg] = useState<string>("");
   const navigate = useNavigate();
   const instance = useAxios();
   function resetUser() {
@@ -74,11 +76,11 @@ export default function AuthContextProvider(props: AuthProps) {
     try {
       await instance.post(REGISTER_URL, user);
       dispatch({ type: REGISTER_SUCCESS });
+      setRegisterMsg("Registeration Success");
     } catch (e) {
-      const errorMessage = apiError(e);
       dispatch({
         type: REGISTER_ERROR,
-        payload: errorMessage,
+        payload: apiError(e),
       });
     }
   }
@@ -92,7 +94,9 @@ export default function AuthContextProvider(props: AuthProps) {
     })();
   }, []);
   return (
-    <AuthContext.Provider value={{ state, resetUser, login, signup, logout }}>
+    <AuthContext.Provider
+      value={{ state, resetUser, login, signup, logout, registerMsg }}
+    >
       {props.children}
     </AuthContext.Provider>
   );

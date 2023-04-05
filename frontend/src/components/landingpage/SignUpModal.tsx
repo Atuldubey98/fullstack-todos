@@ -12,7 +12,7 @@ const SignUpModal = () => {
     name: "",
   });
   const { email, password, name } = user;
-  const { state, signup } = useContext(AuthContext);
+  const { state, signup, registerMsg } = useContext(AuthContext);
   const { registerLoading, registerError } = state;
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target;
@@ -60,7 +60,9 @@ const SignUpModal = () => {
               onChange={onChange}
             />
           </Form.Group>
-
+          {registerMsg ? (
+            <Alert variant={"success"}>{registerMsg}</Alert>
+          ) : null}
           {registerError ? (
             <Alert variant={"danger"}>{registerError}</Alert>
           ) : null}

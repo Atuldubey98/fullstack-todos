@@ -11,8 +11,12 @@ const app: Application = express();
 
 const origins: string[] =
   config.NODE_ENV === "development"
-    ? ["http://localhost:5173", "http://127.0.0.1:9000"]
-    : ["https://frontend-todos.onrender.com"];
+    ? [
+        "http://localhost:5173",
+        "http://127.0.0.1:9000",
+        "http://localhost:4173",
+      ]
+    : ["http://localhost:4173"];
 app.use(express.json());
 const corsOptions = {
   credentials: true, // This is important.
