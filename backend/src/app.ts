@@ -1,30 +1,25 @@
 import express, { Application, NextFunction, Request, Response } from "express";
-import userRouter from "./routes/user.routes";
 import createHttpError, { isHttpError } from "http-errors";
-import session, { SessionOptions } from "express-session";
-import config from "./config";
-import MongoStore from "connect-mongo";
-import todoRouter from "./routes/todo.routes";
 import mongoose from "mongoose";
+import session, { SessionOptions } from "express-session";
+import MongoStore from "connect-mongo";
 import cors from "cors";
-const app: Application = express();
-const origins: string[] =
-  config.NODE_ENV === "development"
-    ? [
-        "http://localhost:5173",
-        "http://127.0.0.1:9000",
-        "http://localhost:4173",
-      ]
-    : ["http://localhost:4173"];
-app.use(express.json());
-const corsOptions = {
-  credentials: true, // This is important.
-  origin: (origin: any, callback: any) => {
-    if (!origin || origins.includes(origin)) {
-      return callback(null, true);
-    }
+import config from "./config";
 
-    callback(new Error("Not allowed by CORS"));
+import todoRouter from "./routes/todo.routes";
+import userRouter from "./routes/user.routes";
+const app: Application = express();
+app.use(express.json());
+
+const whitelist = [config.CLIENT_URL];
+const corsOptions: cors.CorsOptions = {
+  credentials: true, // This is important.
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
   },
 };
 app.use(cors(corsOptions));
@@ -35,7 +30,8 @@ const sessionOptions: SessionOptions = {
   saveUninitialized: false,
   cookie: {
     maxAge: 14 * 24 * 60 * 60 * 1000,
-    httpOnly: false,
+    sameSite: config.NODE_ENV === "production" ? "none" : false,
+    secure: config.NODE_ENV === "production",
   },
   store: MongoStore.create({
     mongoUrl: config.MONGO_URI,
@@ -44,10 +40,8 @@ const sessionOptions: SessionOptions = {
 };
 if (config.NODE_ENV === "production") {
   app.set("trust proxy", 1);
-  sessionOptions!.cookie!.secure = true;
 }
 app.use(session(sessionOptions));
-
 app.get("/health", (req: Request, res: Response) => {
   return res.status(200).send("Server is running");
 });
