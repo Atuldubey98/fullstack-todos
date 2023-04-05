@@ -35,10 +35,6 @@ const sessionOptions: SessionOptions = {
   saveUninitialized: false,
   cookie: {
     maxAge: 14 * 24 * 60 * 60 * 1000,
-    domain:
-      config.NODE_ENV === "development"
-        ? "localhost"
-        : process.env.COOKIE_DOMAIN,
     httpOnly: false,
   },
   store: MongoStore.create({
