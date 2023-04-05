@@ -39,7 +39,7 @@ const sessionOptions: SessionOptions = {
       config.NODE_ENV === "development"
         ? "localhost"
         : process.env.COOKIE_DOMAIN,
-    httpOnly: true,
+    httpOnly: false,
   },
   store: MongoStore.create({
     mongoUrl: config.MONGO_URI,
