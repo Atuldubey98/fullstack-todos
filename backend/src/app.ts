@@ -8,7 +8,6 @@ import todoRouter from "./routes/todo.routes";
 import mongoose from "mongoose";
 import cors from "cors";
 const app: Application = express();
-
 const origins: string[] =
   config.NODE_ENV === "development"
     ? [
@@ -35,14 +34,16 @@ const sessionOptions: SessionOptions = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 60 * 60 * 1000,
+    maxAge: 14 * 24 * 60 * 60 * 1000,
     domain:
       config.NODE_ENV === "development"
         ? "localhost"
         : process.env.COOKIE_DOMAIN,
+    httpOnly: true,
   },
-  store: new MongoStore({
+  store: MongoStore.create({
     mongoUrl: config.MONGO_URI,
+    ttl: 14 * 24 * 60 * 60,
   }),
 };
 if (config.NODE_ENV === "production") {
