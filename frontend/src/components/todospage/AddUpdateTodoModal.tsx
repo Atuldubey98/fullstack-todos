@@ -38,6 +38,13 @@ function AddUpdateTodoModal({
   ) => {
     const { value, name } = e.currentTarget;
     setInitial({ ...inital, [name]: value });
+    const reference = contentRef.current;
+    if (name === "content" && reference) {
+      reference.style.height =
+        `${contentRef.current.scrollHeight}px` < `${reference.style.height}`
+          ? `${reference.style.height}px`
+          : `${contentRef.current.scrollHeight}px`;
+    }
   };
 
   async function onSubmit(e: any) {
@@ -49,6 +56,7 @@ function AddUpdateTodoModal({
       } else {
         await addTodo();
       }
+      setInitial({ content: "", title: "" });
       onHide();
     } catch (e) {
       setError(apiError(e));
@@ -98,9 +106,9 @@ function AddUpdateTodoModal({
               type="text"
               required
               ref={contentRef}
-              style={{}}
               as={"textarea"}
               name="content"
+              rows={inital?._id ? undefined : 2}
               onChange={onChange}
               value={inital?.content}
             />
