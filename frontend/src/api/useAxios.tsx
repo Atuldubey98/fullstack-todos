@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 const useAxios = () => {
   const navigate = useNavigate();
   const baseURL = import.meta.env.DEV
-    ? "http://localhost:9000/"
-    : "https://backend-todos-mdal.onrender.com";
+    ? "http://localhost:9000"
+    : import.meta.env.VITE_API_URL;
   const instance = axios.create({
     baseURL,
     withCredentials: true,

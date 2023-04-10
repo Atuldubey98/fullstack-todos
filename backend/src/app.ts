@@ -31,7 +31,7 @@ const sessionOptions: SessionOptions = {
   cookie: {
     maxAge: 14 * 24 * 60 * 60 * 1000,
     sameSite: config.NODE_ENV === "production" ? "none" : false,
-    signed: true,
+    signed : true,
     secure: config.NODE_ENV === "production",
   },
   store: MongoStore.create({
