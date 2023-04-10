@@ -57,7 +57,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
   let errorMessage = "An unknown error occured.";
   let statusCode = 500;
-  console.log(error);
   if (error instanceof mongoose.Error) {
     errorMessage = error.message;
     statusCode = 400;
