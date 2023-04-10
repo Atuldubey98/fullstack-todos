@@ -14,7 +14,6 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log(req.originalUrl);
   if (req.originalUrl.startsWith("/api")) {
     next();
   } else {
