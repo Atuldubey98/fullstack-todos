@@ -14,10 +14,11 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 app.use((req: Request, res: Response, next: NextFunction) => {
-  if (req.url.startsWith("api")) {
+  if (req.originalUrl.startsWith("/api")) {
     next();
+  } else {
+    return res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
   }
-  return res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
 });
 
 const whitelist = [config.CLIENT_URL];
