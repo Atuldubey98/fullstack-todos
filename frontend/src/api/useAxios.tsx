@@ -5,7 +5,7 @@ const useAxios = () => {
   const navigate = useNavigate();
   const baseURL = import.meta.env.DEV
     ? "http://localhost:9000"
-    : import.meta.env.VITE_API_URL;
+    : import.meta.env.BASE_URL;
   const instance = axios.create({
     baseURL,
     withCredentials: true,
