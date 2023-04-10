@@ -8,8 +8,18 @@ import config from "./config";
 
 import todoRouter from "./routes/todo.routes";
 import userRouter from "./routes/user.routes";
+import path from "path";
 const app: Application = express();
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, "../../frontend/dist")));
+app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log(req.url)
+  if (req.url.startsWith("api")) {
+    next();
+  }
+  return res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
+});
 
 const whitelist = [config.CLIENT_URL];
 const corsOptions: cors.CorsOptions = {
@@ -32,6 +42,7 @@ const sessionOptions: SessionOptions = {
     ttl: 14 * 24 * 60 * 60,
   }),
 };
+
 if (config.NODE_ENV === "production") {
   app.set("trust proxy", 1);
 }
@@ -47,6 +58,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
   let errorMessage = "An unknown error occured.";
   let statusCode = 500;
+  console.log(error);
   if (error instanceof mongoose.Error) {
     errorMessage = error.message;
     statusCode = 400;
