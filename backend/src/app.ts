@@ -27,6 +27,12 @@ const sessionOptions: SessionOptions = {
   secret: config.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
+  cookie: {
+    maxAge: 14 * 24 * 60 * 60 * 1000,
+    sameSite: config.NODE_ENV === "production" ? "none" : false,
+    signed : true,
+    secure: config.NODE_ENV === "production",
+  },
   store: MongoStore.create({
     mongoUrl: config.MONGO_URI,
     ttl: 14 * 24 * 60 * 60,
