@@ -24,16 +24,9 @@ const corsOptions: cors.CorsOptions = {
 };
 app.use(cors(corsOptions));
 const sessionOptions: SessionOptions = {
-  name: config.SESSION_NAME,
   secret: config.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 14 * 24 * 60 * 60 * 1000,
-    sameSite: config.NODE_ENV === "production" ? "none" : false,
-    signed : true,
-    secure: config.NODE_ENV === "production",
-  },
+  saveUninitialized: true,
   store: MongoStore.create({
     mongoUrl: config.MONGO_URI,
     ttl: 14 * 24 * 60 * 60,
