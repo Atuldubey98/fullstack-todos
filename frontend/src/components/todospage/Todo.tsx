@@ -7,6 +7,7 @@ import styles from "./Todo.module.css";
 import useDate from "../../hooks/useDate";
 import useAxios from "../../api/useAxios";
 import { TodoContext } from "../../contexts/TodoContext";
+import { UIContext } from "../../contexts/UIContext";
 function Todo({
   todo,
   onSetTodo,
@@ -38,9 +39,13 @@ function Todo({
       setCompleteLoading(false);
     }
   }
+  const { isThemeDark } = useContext(UIContext);
   return (
     <Card
-      style={{ border: todo.complete ? "3px solid #00ef0087" : "" }}
+      style={{
+        backgroundColor: isThemeDark ? "rgba(59,50,89,0.35)" : undefined,
+        border: todo.complete ? "3px solid #00ef0087" : "",
+      }}
       className="m-1"
     >
       <AiTwotoneDelete
@@ -58,7 +63,7 @@ function Todo({
         <Card.Text>{todo.content}</Card.Text>
       </Card.Body>
       <Card.Footer className="d-flex justify-content-between text-muted">
-        {getDate(todo)}{" "}
+        {getDate(todo)}
         {completeLoading ? (
           <Spinner animation="grow" />
         ) : (

@@ -6,6 +6,7 @@ import TodoResult from "../components/todossearchpage/TodoResult";
 import useQuery from "../hooks/useQuery";
 import ISearchTodo from "../interfaces/ISearchTodo";
 import { FcTodoList } from "react-icons/fc";
+import NoTodos from "../components/NoTodos";
 
 function TodoSearchPage() {
   const query = useQuery();
@@ -40,17 +41,13 @@ function TodoSearchPage() {
           <Container className="d-flex align-items-center justify-content-center">
             <Spinner animation="grow" />
           </Container>
-        ) : (
+        ) : results.length > 0 ? (
           results.map((result: ISearchTodo, index: number) => (
             <TodoResult result={result} key={index} />
           ))
+        ) : (
+          <NoTodos />
         )}
-        {results.length === 0 ? (
-          <h1 className="text-center">
-            <FcTodoList />
-            No Todos found{" "}
-          </h1>
-        ) : null}
       </Container>
     </Container>
   );

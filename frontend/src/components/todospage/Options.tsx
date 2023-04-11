@@ -26,18 +26,19 @@ function Options({
   };
 
   return (
-    <Container className="d-flex align-items-center justify-content-center flex-column mt-3">
-      <Button
-        style={{ maxWidth: "20rem", marginBottom: "0.5rem" }}
-        onClick={toggleShowAdd}
-        variant="success"
-      >
-        <AiFillPlusSquare /> Add
-      </Button>
-      <Row xs={1} md={2} xl={2}>
+    <Container className="">
+      <div className="d-flex align-items-center justify-content-center m-2">
+        <Button
+          onClick={toggleShowAdd}
+          variant="success"
+        >
+          <AiFillPlusSquare /> Add
+        </Button>
+      </div>
+      <Row xl={2} md={2}>
         <Col>
           <Form.Group>
-            <Form.Label>Date : </Form.Label>
+            <Form.Label className="fw-bold">Date : </Form.Label>
             <Form.Control
               type="date"
               name="createdAt"
@@ -47,9 +48,7 @@ function Options({
             />
           </Form.Group>
         </Col>
-        <Col>
-          <TodoSearchForm />
-        </Col>
+        <TodoSearchForm />
       </Row>
     </Container>
   );

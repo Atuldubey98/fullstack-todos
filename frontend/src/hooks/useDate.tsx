@@ -17,11 +17,11 @@ function useDate() {
         : `0${output.getMonth() + 1}`;
     const year = output.getFullYear().toString();
     const time = `${
-      output.getHours() > 10
+      output.getHours() > 9
         ? output.getHours().toString()
         : `0${output.getHours().toString()}`
     }:${
-      output.getMinutes() > 10
+      output.getMinutes() > 9
         ? output.getMinutes().toString()
         : `0${output.getMinutes()}`
     }`;

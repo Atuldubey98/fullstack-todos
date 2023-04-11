@@ -8,6 +8,7 @@ import { FcTodoList } from "react-icons/fc";
 import { TodoContext } from "../contexts/TodoContext";
 import ITodo from "../interfaces/ITodo";
 import useDate from "../hooks/useDate";
+import NoTodos from "../components/NoTodos";
 
 const TodosPage = () => {
   const { state, getTodos } = useContext(TodoContext);
@@ -49,28 +50,24 @@ const TodosPage = () => {
       />
       <Container className="mt-2 d-flex justify-content-center align-items-center">
         {error ? <Alert variant={"danger"}>{error}</Alert> : null}
-
-        {todos.length <= 0 ? (
-          <h1 style={{ fontSize: "3rem" }} className="font-weight-bold">
-            <FcTodoList />
-            Nothing to do !
-          </h1>
-        ) : null}
       </Container>
       {loading ? (
         <Container className="mt-2 d-flex justify-content-center align-items-center">
           <Spinner animation="grow" />
         </Container>
       ) : (
-        <Row xs={1} md={2} xl={3}>
-          {todos.map((todo) => (
-            <Col key={todo._id}>
-              <Todo todo={todo} onSetTodo={onSetTodo} />
-            </Col>
-          ))}
+        <Row>
+          {todos.length > 0 ? (
+            todos.map((todo) => (
+              <Col sm={6} md={6} xl={4} key={todo._id}>
+                <Todo todo={todo} onSetTodo={onSetTodo} />
+              </Col>
+            ))
+          ) : (
+            <NoTodos />
+          )}
         </Row>
       )}
-
       {showUpdate ? (
         <AddUpdateTodoModal
           show={showUpdate}

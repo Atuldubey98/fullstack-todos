@@ -5,16 +5,27 @@ import { FcTodoList } from "react-icons/fc";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../contexts/AuthContext";
 import { UIContext } from "../contexts/UIContext";
+import { MdDarkMode } from "react-icons/md";
+import { FaRegLightbulb } from "react-icons/fa";
 
 const Header = () => {
   const { toggleLoginModal, toggleSignUpModal } = useContext(UIContext);
   const { state, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { toggleTheme, isThemeDark } = useContext(UIContext);
   return (
-    <Navbar bg="primary" variant="dark">
+    <Navbar bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand style={{cursor : 'pointer'}} onClick={() => navigate("/")}>
+        <Navbar.Brand
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        >
           <FcTodoList /> Todos
+          {isThemeDark ? (
+            <FaRegLightbulb role="button" size={30} onClick={toggleTheme} />
+          ) : (
+            <MdDarkMode role="button" size={30} onClick={toggleTheme} />
+          )}
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">

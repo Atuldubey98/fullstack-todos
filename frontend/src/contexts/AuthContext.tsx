@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiError from "../api/apiErrors";
@@ -9,7 +8,6 @@ import ISignUpUser from "../interfaces/ISignUpUser";
 import authReducer, {
   AUTH_LOADING,
   AUTH_SUCCESS,
-  defaultAuthState,
   LOGIN_ERROR,
   LOGIN_LOADING,
   LOGIN_SUCCESS,
@@ -17,10 +15,10 @@ import authReducer, {
   REGISTER_LOADING,
   REGISTER_SUCCESS,
   RESET_USER,
+  defaultAuthState,
 } from "../reducers/authReducer";
-import { UIContext } from "./UIContext";
-import { TODOS_SUCCESS } from "../reducers/todoReducer";
 import { TodoContext } from "./TodoContext";
+import { UIContext } from "./UIContext";
 
 export const AuthContext = React.createContext({
   state: defaultAuthState,

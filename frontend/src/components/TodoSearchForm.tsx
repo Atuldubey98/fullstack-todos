@@ -18,7 +18,9 @@ function TodoSearchForm() {
   return (
     <Form onSubmit={navigateSearchTodos}>
       <Form.Group>
-        <Form.Label htmlFor="word">Search By Title or Contents : </Form.Label>
+        <Form.Label className="fw-bold" htmlFor="word">
+          Search By Title or Contents :{" "}
+        </Form.Label>
         <div className="d-flex justify-content-center align-items-center gap-3 mb-3">
           <Form.Control
             type="text"
