@@ -1,0 +1,12 @@
+.todo__results {
+  animation: todo__results 300ms ease-in forwards;
+}
+
+@keyframes todo__results {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

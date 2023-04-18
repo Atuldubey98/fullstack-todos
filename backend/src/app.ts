@@ -20,7 +20,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     return res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
   }
 });
-
 const whitelist = [config.CLIENT_URL];
 const corsOptions: cors.CorsOptions = {
   credentials: true, // This is important.

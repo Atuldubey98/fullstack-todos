@@ -21,12 +21,12 @@ const Header = () => {
           onClick={() => navigate("/")}
         >
           <FcTodoList /> Todos
-          {isThemeDark ? (
-            <FaRegLightbulb role="button" size={30} onClick={toggleTheme} />
-          ) : (
-            <MdDarkMode role="button" size={30} onClick={toggleTheme} />
-          )}
         </Navbar.Brand>
+        {isThemeDark ? (
+          <FaRegLightbulb role="button" size={30} onClick={toggleTheme} />
+        ) : (
+          <MdDarkMode color="yellow" role="button" size={30} onClick={toggleTheme} />
+        )}
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           {state.user ? (

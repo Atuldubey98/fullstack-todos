@@ -46,7 +46,9 @@ function Todo({
         backgroundColor: isThemeDark ? "rgba(59,50,89,0.35)" : undefined,
         border: todo.complete ? "3px solid #00ef0087" : "",
       }}
-      className="m-1"
+      className={
+        todo.complete ? `${styles.todo} ${styles.todo__complete}` : styles.todo
+      }
     >
       <AiTwotoneDelete
         style={{ cursor: "pointer" }}
