@@ -4,6 +4,7 @@ import ILoginUser from "../interfaces/ILoginUser";
 import IUser from "../interfaces/IUser";
 import User from "../models/User";
 import * as bcryptjs from "bcryptjs";
+
 declare module "express-session" {
   export interface SessionData {
     user: { [key: string]: any };
@@ -11,11 +12,14 @@ declare module "express-session" {
 }
 class UserController {
   public static async login(req: Request, res: Response, next: NextFunction) {
-    const { email, password }: ILoginUser = req.body;
     try {
+      const { email, password }: ILoginUser = req.body;
+      if (!email || !password) {
+        throw createHttpError(404, "PAYLOAD_ERROR");
+      }
       const existUser = await User.findOne({ email });
       if (!existUser) {
-        throw createHttpError(400, "LOGIN_EMAIL_ERROR");
+        throw createHttpError(404, "LOGIN_EMAIL_ERROR");
       }
       const matches = await bcryptjs.compare(password, existUser.password);
       if (!matches) {
@@ -35,9 +39,12 @@ class UserController {
   ) {
     try {
       const { email, password, name }: IUser = req.body;
+      if (!email || !password || !name) {
+        throw createHttpError(404, "PAYLOAD_ERROR");
+      }
       const existUser = await User.findOne({ email });
       if (existUser) {
-        throw createHttpError(400, "REGISTER_USER_EXISTS");
+        throw createHttpError(409, "REGISTER_USER_EXISTS");
       }
       const passHash = await bcryptjs.hash(
         password,

@@ -1,14 +1,16 @@
-import express, { Application, NextFunction, Request, Response } from "express";
-import createHttpError, { isHttpError } from "http-errors";
-import mongoose from "mongoose";
-import session, { SessionOptions } from "express-session";
 import MongoStore from "connect-mongo";
 import cors from "cors";
+import express, { Application, NextFunction, Request, Response } from "express";
+import session, { SessionOptions } from "express-session";
+import createHttpError, { isHttpError } from "http-errors";
+import mongoose from "mongoose";
 import config from "./config";
 
+import path from "path";
 import todoRouter from "./routes/todo.routes";
 import userRouter from "./routes/user.routes";
-import path from "path";
+mongoose.connect(config.MONGO_URI);
+
 const app: Application = express();
 app.use(express.json());
 
@@ -46,7 +48,7 @@ if (config.NODE_ENV === "production") {
   app.set("trust proxy", 1);
 }
 app.use(session(sessionOptions));
-app.get("/health", (req: Request, res: Response) => {
+app.get("/api/v1/health", (req: Request, res: Response) => {
   return res.status(200).send("Server is running");
 });
 app.use("/api/v1/users", userRouter);

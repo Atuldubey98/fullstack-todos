@@ -1,4 +1,5 @@
-import { InferSchemaType, model, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
+import ITodo from "../interfaces/ITodo";
 
 const todoSchema = new Schema(
   {
@@ -24,6 +25,6 @@ const todoSchema = new Schema(
   },
   { timestamps: true, versionKey: false }
 );
-type Todo = InferSchemaType<typeof todoSchema>;
-const todoModel = model<Todo>("todo", todoSchema);
+
+const todoModel = model<ITodo>("todo", todoSchema);
 export default todoModel;
