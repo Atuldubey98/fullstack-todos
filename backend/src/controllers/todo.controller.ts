@@ -77,6 +77,7 @@ class TodoController {
   ) {
     try {
       const newTodo = new Todo({ userId: req.session.user!._id, ...req.body });
+      
       await newTodo.save();
       res.status(201).send(newTodo);
     } catch (error) {
@@ -145,9 +146,9 @@ class TodoController {
         userId: req.session.user!._id,
       });
       if (!todo) {
-        throw createHttpError(400, "TODO_NOT_FOUND");
+        throw createHttpError(404, "TODO_NOT_FOUND");
       }
-      return res.sendStatus(200);
+      return res.sendStatus(204);
     } catch (error) {
       next(error);
     }

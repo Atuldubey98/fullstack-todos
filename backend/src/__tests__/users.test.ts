@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import app from "../app";
-const userPayLoad: { email: string; password: string } = {
+export const userPayLoad: { email: string; password: string } = {
   email: "test@test.com",
   password: "12345678",
 };
@@ -18,7 +18,7 @@ describe("users", () => {
       });
     });
     describe("given the user has logged in", () => {
-      it("should return a 401", async () => {
+      it("should return a 200", async () => {
         const { headers } = await supertest(app)
           .post("/api/v1/users/login")
           .send(userPayLoad);
