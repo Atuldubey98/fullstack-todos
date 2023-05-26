@@ -19,7 +19,7 @@ function TodoConfirmDeleteModal({
     try {
       setLoading(true);
       const response = await instance.delete(`/api/v1/todos/${_id}`);
-      if (response.status === 200) {
+      if (response.status === 204) {
         handleClose();
         deleteTodoContext(_id);
       }
