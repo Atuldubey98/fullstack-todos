@@ -112,7 +112,6 @@ class TodoController {
         /\b(gte|gt|lte|lt)\b/g,
         (match) => `$${match}`
       );
-      console.log(queryString);
       
       const filter = JSON.parse(queryString);
 
