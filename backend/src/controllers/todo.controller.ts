@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
+import { ObjectId } from "mongodb";
 import ITodo from "../interfaces/ITodo";
 import Todo from "../models/Todo";
 function getPreviousOrNextDate(checkDate: Date, payload: number): Date {
@@ -42,27 +43,42 @@ class TodoController {
   ) {
     try {
       const word = typeof req.query.word === "string" ? req.query.word : "";
-      const searchedTodos: ITodo[] = await Todo.find({
-        $text: { $search: word },
-        userId: req.session.user!._id,
-      });
-      const map = new Map<string, ITodo[]>();
-      searchedTodos.forEach((todo: ITodo) => {
-        const createdAt = new Date(todo?.createdAt)
-          .toISOString()
-          .substring(0, 10);
-        if (!map.has(createdAt)) {
-          const todos: ITodo[] = [todo];
-          map.set(createdAt, todos);
-        } else {
-          map.get(createdAt)?.push(todo);
-        }
-      });
-      const response: any = [];
-      for (const [createdAt, todos] of map.entries()) {
-        response.push({ createdAt, todos });
-      }
-      return res.status(200).send(response);
+      const result = await Todo.aggregate([
+        {
+          $match: {
+            $text: { $search: word },
+            userId: new ObjectId(req.session.user!._id),
+          },
+        },
+        {
+          $group: {
+            _id: {
+              $dateToString: {
+                format: "%Y-%m-%d",
+                date: "$createdAt",
+              },
+            },
+            todos: {
+              $push: {
+                userId: "$userId",
+                complete: "$complete",
+                title: "$title",
+                content: "$content",
+                createdAt: "$createdAt",
+                updatedAt: "$updatedAt",
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            createdAt: "$_id",
+            todos: 1,
+            _id: 0,
+          },
+        },
+      ]);
+      return res.status(200).send(result);
     } catch (error) {
       next(error);
     }
@@ -77,7 +93,7 @@ class TodoController {
   ) {
     try {
       const newTodo = new Todo({ userId: req.session.user!._id, ...req.body });
-      
+
       await newTodo.save();
       res.status(201).send(newTodo);
     } catch (error) {
@@ -96,6 +112,8 @@ class TodoController {
         /\b(gte|gt|lte|lt)\b/g,
         (match) => `$${match}`
       );
+      console.log(queryString);
+      
       const filter = JSON.parse(queryString);
 
       const todos = await Todo.find({

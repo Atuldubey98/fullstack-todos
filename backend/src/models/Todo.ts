@@ -25,6 +25,7 @@ const todoSchema = new Schema(
   },
   { timestamps: true, versionKey: false }
 );
-
+todoSchema.index({ title: "text", content: "text" });
 const todoModel = model<ITodo>("todo", todoSchema);
+
 export default todoModel;
